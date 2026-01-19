@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic Meta -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Title -->
+    <title>Gravity Playground</title>
+
+    <!-- SEO Meta -->
+    <meta name="description" content="Gravity Playground is an interactive physics simulation where you can experiment with gravity, motion, and particles in a fun and visual way." />
+    <meta name="keywords" content="gravity playground, physics simulation, gravity game, physics sandbox, interactive physics, gravity experiment" />
+    <meta name="author" content="Webnate" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph (for social sharing) -->
+    <meta property="og:title" content="Gravity Playground" />
+    <meta property="og:description" content="Play, experiment, and visualize gravity and motion in this interactive physics playground." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://gravityplayground.vercel.app/" />
+    <!-- og:image intentionally excluded -->
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Gravity Playground" />
+    <meta name="twitter:description" content="An interactive playground to explore gravity and physics visually." />
+    <!-- twitter:image intentionally excluded -->
+
+    <!-- Theme & App -->
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!-- Fullscreen Canvas -->
+    <canvas id="canvas"></canvas>
+
+    <!-- Gravity Selector (Minimal UI) -->
+    <div id="gravity-selector">
+    <div class="gravity-item">
+        <button data-gravity="planet" title="Planet Gravity">🪐</button>
+        <span>1</span>
+    </div>
+    <div class="gravity-item">
+        <button data-gravity="star" title="Star Gravity">⭐</button>
+        <span>2</span>
+    </div>
+    <div class="gravity-item">
+        <button data-gravity="blackhole" title="Black Hole Gravity">🕳️</button>
+        <span>3</span>
+    </div>
+    <div class="gravity-item">
+        <button data-gravity="insane" title="Insane Gravity">🌀</button>
+        <span>4</span>
+    </div>
+    <div class="gravity-item">
+        <button data-gravity="rupture" title="Rupture">⚡</button>
+        <span>5</span>
+    </div>
+</div>
+
+
+    <!-- Script -->
+    <script src="script.js"></script>
+
+</body>
+</html>
