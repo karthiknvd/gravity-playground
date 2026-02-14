@@ -61,6 +61,7 @@ const gravityProfiles = {
 };
 
 let activeGravity = gravityProfiles.planet;
+let cursorEffectsEnabled = true;
 
 /* ------------------------------
    UI Interaction
@@ -86,6 +87,29 @@ buttons.forEach(btn => {
 setGravity("planet");
 
 /* ------------------------------
+   Cursor Effect Toggle
+------------------------------ */
+const cursorToggleBtn = document.getElementById("cursor-toggle");
+
+function toggleCursorEffects() {
+    cursorEffectsEnabled = !cursorEffectsEnabled;
+    
+    if (cursorEffectsEnabled) {
+        cursorToggleBtn.classList.remove("inactive");
+        cursorToggleBtn.classList.add("active");
+    } else {
+        cursorToggleBtn.classList.remove("active");
+        cursorToggleBtn.classList.add("inactive");
+    }
+}
+
+cursorToggleBtn.addEventListener("click", toggleCursorEffects);
+
+// Set initial state
+cursorToggleBtn.classList.add("active");
+
+
+/* ------------------------------
    Keyboard Shortcuts
 ------------------------------ */
 window.addEventListener("keydown", (e) => {
@@ -94,6 +118,7 @@ window.addEventListener("keydown", (e) => {
     if (e.key === "3") setGravity("blackhole");
     if (e.key === "4") setGravity("insane");
     if (e.key === "5") setGravity("rupture");
+    if (e.key === "e" || e.key === "E") toggleCursorEffects();
 });
 
 /* ------------------------------
@@ -110,6 +135,211 @@ window.addEventListener("mouseleave", () => {
     mouse.x = null;
     mouse.y = null;
 });
+
+/* ------------------------------
+   Cursor Animation Effect
+------------------------------ */
+function drawCursorEffect() {
+    const pulse = Math.sin(time * 3) * 0.5 + 0.5;
+    
+    ctx.save();
+    
+    if (activeGravity === gravityProfiles.planet) {
+        // Planet: Gentle pulsing ring
+        const radius = 60 + pulse * 15;
+        ctx.strokeStyle = `rgba(120, 180, 255, ${0.4 - pulse * 0.2})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, radius, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        // Inner ring
+        ctx.strokeStyle = `rgba(120, 180, 255, ${0.2})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 40, 0, Math.PI * 2);
+        ctx.stroke();
+    }
+    else if (activeGravity === gravityProfiles.star) {
+        // Star: Bright pulsing with glow
+        const radius = 100 + pulse * 30;
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = 'rgba(255, 220, 120, 0.6)';
+        ctx.strokeStyle = `rgba(255, 220, 120, ${0.5 - pulse * 0.25})`;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, radius, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        // Multiple rings
+        ctx.strokeStyle = `rgba(255, 200, 100, ${0.3})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 70, 0, Math.PI * 2);
+        ctx.stroke();
+    }
+    else if (activeGravity === gravityProfiles.blackhole) {
+        // Black Hole: Spiraling vortex effect
+        const numRings = 4;
+        for (let i = 0; i < numRings; i++) {
+            const offset = (time * 2 + i * 0.5) % 2;
+            const radius = 80 + i * 40 + offset * 20;
+            const alpha = (0.6 - i * 0.15) * (1 - offset / 2);
+            
+            ctx.strokeStyle = `rgba(180, 100, 255, ${alpha})`;
+            ctx.lineWidth = 3 - i * 0.5;
+            ctx.shadowBlur = 25;
+            ctx.shadowColor = 'rgba(180, 100, 255, 0.8)';
+            ctx.beginPath();
+            ctx.arc(mouse.x, mouse.y, radius, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+    }
+    else if (activeGravity === gravityProfiles.insane) {
+        // Insane: Chaotic expanding rings
+        const numRings = 6;
+        for (let i = 0; i < numRings; i++) {
+            const chaosOffset = Math.sin(time * 5 + i) * 20;
+            const radius = 50 + i * 60 + chaosOffset + pulse * 30;
+            const alpha = 0.5 - i * 0.08;
+            
+            ctx.strokeStyle = `rgba(255, 100, 150, ${alpha})`;
+            ctx.lineWidth = 4;
+            ctx.shadowBlur = 30;
+            ctx.shadowColor = 'rgba(255, 100, 150, 0.6)';
+            ctx.beginPath();
+            ctx.arc(mouse.x, mouse.y, radius, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            // Chaotic particles
+            if (i % 2 === 0) {
+                ctx.fillStyle = `rgba(255, 150, 200, ${alpha})`;
+                for (let j = 0; j < 8; j++) {
+                    const angle = (j / 8) * Math.PI * 2 + time * 3;
+                    const x = mouse.x + Math.cos(angle) * radius;
+                    const y = mouse.y + Math.sin(angle) * radius;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+    }
+    else if (activeGravity === gravityProfiles.rupture) {
+        // Rupture: Crackling webpage-breaking effect
+        const crackCount = 25;
+        const maxCrackLength = 300;
+        
+        for (let i = 0; i < crackCount; i++) {
+            // Random crack starting from cursor
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * maxCrackLength;
+            
+            const endX = mouse.x + Math.cos(angle) * distance;
+            const endY = mouse.y + Math.sin(angle) * distance;
+            
+            // Jagged crack line
+            ctx.strokeStyle = `rgba(255, ${Math.random() * 100}, ${Math.random() * 100}, ${0.3 + Math.random() * 0.4})`;
+            ctx.lineWidth = 1 + Math.random() * 2;
+            ctx.shadowBlur = 10 + Math.random() * 15;
+            ctx.shadowColor = 'rgba(255, 50, 50, 0.8)';
+            
+            ctx.beginPath();
+            ctx.moveTo(mouse.x, mouse.y);
+            
+            // Create jagged segments
+            const segments = 5 + Math.floor(Math.random() * 8);
+            let currentX = mouse.x;
+            let currentY = mouse.y;
+            
+            for (let j = 1; j <= segments; j++) {
+                const progress = j / segments;
+                const targetX = mouse.x + (endX - mouse.x) * progress;
+                const targetY = mouse.y + (endY - mouse.y) * progress;
+                
+                // Add randomness for jagged effect
+                const offsetX = (Math.random() - 0.5) * 30;
+                const offsetY = (Math.random() - 0.5) * 30;
+                
+                currentX = targetX + offsetX;
+                currentY = targetY + offsetY;
+                
+                ctx.lineTo(currentX, currentY);
+            }
+            ctx.stroke();
+        }
+        
+        // Shattered glass effect - radiating shards
+        const shardCount = 15;
+        for (let i = 0; i < shardCount; i++) {
+            const angle = (i / shardCount) * Math.PI * 2 + time * 2;
+            const radius = 80 + Math.random() * 120;
+            
+            const x = mouse.x + Math.cos(angle) * radius;
+            const y = mouse.y + Math.sin(angle) * radius;
+            
+            // Draw shard triangle
+            ctx.fillStyle = `rgba(255, 255, 255, ${0.1 + Math.random() * 0.15})`;
+            ctx.strokeStyle = `rgba(255, 100, 100, ${0.4 + Math.random() * 0.3})`;
+            ctx.lineWidth = 1;
+            
+            ctx.beginPath();
+            const size = 15 + Math.random() * 25;
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + Math.random() * size - size/2, y + Math.random() * size - size/2);
+            ctx.lineTo(x + Math.random() * size - size/2, y + Math.random() * size - size/2);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+        }
+        
+        // Distortion waves
+        const waveCount = 8;
+        for (let i = 0; i < waveCount; i++) {
+            const radius = 50 + i * 80 + Math.sin(time * 4 + i) * 30;
+            const alpha = (0.4 - i * 0.04) * (0.5 + Math.sin(time * 6) * 0.5);
+            
+            ctx.strokeStyle = `rgba(255, ${50 + i * 20}, 150, ${alpha})`;
+            ctx.lineWidth = 2;
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = 'rgba(255, 50, 150, 0.6)';
+            
+            // Draw distorted circle
+            ctx.beginPath();
+            const points = 16;
+            for (let j = 0; j <= points; j++) {
+                const angle = (j / points) * Math.PI * 2;
+                const distortion = (Math.random() - 0.5) * 25;
+                const r = radius + distortion;
+                const px = mouse.x + Math.cos(angle) * r;
+                const py = mouse.y + Math.sin(angle) * r;
+                
+                if (j === 0) {
+                    ctx.moveTo(px, py);
+                } else {
+                    ctx.lineTo(px, py);
+                }
+            }
+            ctx.stroke();
+        }
+        
+        // Screen tear effect near cursor
+        if (Math.random() > 0.7) {
+            const tearX = mouse.x + (Math.random() - 0.5) * 100;
+            const tearY = mouse.y + (Math.random() - 0.5) * 100;
+            const tearWidth = 2 + Math.random() * 4;
+            const tearHeight = 50 + Math.random() * 150;
+            
+            ctx.fillStyle = `rgba(0, 0, 0, ${0.3 + Math.random() * 0.4})`;
+            ctx.fillRect(tearX, tearY, tearWidth, tearHeight);
+            
+            ctx.fillStyle = `rgba(255, 255, 255, ${0.6 + Math.random() * 0.4})`;
+            ctx.fillRect(tearX + tearWidth, tearY, 1, tearHeight);
+        }
+    }
+    
+    ctx.restore();
+}
 
 /* ------------------------------
    Particle System
@@ -317,6 +547,11 @@ function animate() {
     ctx.fillStyle = "rgba(11,11,15,0.3)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     time += 0.01;
+
+    // Draw cursor animation effect
+    if (mouse.x !== null && mouse.active && cursorEffectsEnabled) {
+        drawCursorEffect();
+    }
 
     // Screen shake for rupture mode
     if (activeGravity === gravityProfiles.rupture) {
