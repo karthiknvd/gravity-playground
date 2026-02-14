@@ -75,6 +75,49 @@ function setGravity(type) {
     document
         .querySelector(`#gravity-selector button[data-gravity="${type}"]`)
         .classList.add("active");
+    
+    // Show mode indicator
+    showModeIndicator(type);
+}
+
+/* ------------------------------
+   Mode Indicator
+------------------------------ */
+const modeIndicator = document.getElementById("mode-indicator");
+let indicatorTimeout;
+
+function showModeIndicator(type) {
+    // Clear any existing animation
+    if (indicatorTimeout) {
+        clearTimeout(indicatorTimeout);
+    }
+    
+    // Remove all classes
+    modeIndicator.className = '';
+    
+    // Set text based on mode
+    const modeNames = {
+        planet: "Planet",
+        star: "Star",
+        blackhole: "Black Hole",
+        insane: "Insane",
+        rupture: "Rupture"
+    };
+    
+    modeIndicator.innerHTML = `Gravity Mode:<br>${modeNames[type]}`;
+    
+    // Add mode-specific class and show class
+    modeIndicator.classList.add(type);
+    
+    // Trigger reflow to restart animation
+    void modeIndicator.offsetWidth;
+    
+    modeIndicator.classList.add('show');
+    
+    // Remove show class after animation completes
+    indicatorTimeout = setTimeout(() => {
+        modeIndicator.classList.remove('show');
+    }, 1500);
 }
 
 buttons.forEach(btn => {

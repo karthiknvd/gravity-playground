@@ -193,3 +193,120 @@ canvas {
         right: 14px;
     }
 }
+
+/* ------------------------------
+   Mode Indicator (Galactic Text)
+------------------------------ */
+#mode-indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    
+    pointer-events: none;
+    user-select: none;
+    
+    opacity: 0;
+    
+    transition: none;
+    
+    z-index: 1000;
+}
+
+/* Galactic text effect */
+#mode-indicator.show {
+    animation: galaxyPopup 1.5s ease-out forwards;
+}
+
+@keyframes galaxyPopup {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+    10% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    20% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    80% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+}
+
+/* Color themes for each mode */
+#mode-indicator.planet {
+    color: #78b4ff;
+    text-shadow: 
+        0 0 10px #78b4ff,
+        0 0 20px #78b4ff,
+        0 0 30px #4d9fff,
+        0 0 40px #4d9fff,
+        0 0 60px #4d9fff,
+        0 0 80px #2d7fff;
+}
+
+#mode-indicator.star {
+    color: #ffd966;
+    text-shadow: 
+        0 0 10px #ffd966,
+        0 0 20px #ffd966,
+        0 0 30px #ffcc33,
+        0 0 40px #ffcc33,
+        0 0 60px #ffb800,
+        0 0 80px #ff9900;
+}
+
+#mode-indicator.blackhole {
+    color: #1a0033;
+    text-shadow: 
+        0 0 10px #9966ff,
+        0 0 20px #7744cc,
+        0 0 30px #5522aa,
+        0 0 40px #440099,
+        0 0 60px #330077,
+        0 0 80px #220055,
+        0 0 100px #110033;
+    -webkit-text-stroke: 2px #9966ff;
+}
+
+#mode-indicator.insane {
+    color: #ff6699;
+    text-shadow: 
+        0 0 10px #ff6699,
+        0 0 20px #ff3377,
+        0 0 30px #ff0055,
+        0 0 40px #ff0055,
+        0 0 60px #cc0044,
+        0 0 80px #990033;
+}
+
+#mode-indicator.rupture {
+    color: #ff3333;
+    text-shadow: 
+        0 0 10px #ff0000,
+        0 0 20px #ff0000,
+        0 0 30px #cc0000,
+        0 0 40px #990000;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 600px) {
+    #mode-indicator {
+        font-size: 2rem;
+        letter-spacing: 0.1em;
+    }
+}
